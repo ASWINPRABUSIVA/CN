@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distance Converter</title>
+    <style>
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    perspective: 1000px;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(145deg, #e0e5ec, #ffffff);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+h1 {
+    color: #333;
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    letter-spacing: 4px;
+    position: relative;
+}
+h1::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    height: 5px;
+    width: 80px;
+    background: #333;
+    border-radius: 5px;
+}
+form {
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), inset 0 5px 10px rgba(255, 255, 255, 0.8);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 10;
+    transform-style: preserve-3d;
+    transform: rotateY(5deg) rotateX(3deg);
+    transition: all 0.5s ease-in-out;
+}
+form:hover {
+    transform: rotateY(0deg) rotateX(0deg);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2), inset 0 7px 15px rgba(255, 255, 255, 0.9);
+}
+label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 700;
+}
+input, select {
+    padding: 10px;  /* Reduced padding */
+    font-size: 1em; /* Reduced font size */
+    border: none;
+    background: #f0f0f3;
+    border-radius: 8px; /* Slightly smaller border radius */
+    margin-bottom: 15px;
+
+    box-shadow: inset 4px 4px 12px #bec3c9, inset -4px -4px 12px #fff;
+    transition: all 0.3s ease;
+    transform: translateZ(15px);  /* Reduced 3D depth */
+    width: 85%;  /* Reduced width to 85% */
+}
+input:hover, select:hover {
+    box-shadow: inset 5px 5px 15px #d1d7dd, inset -5px -5px 15px #fff;
+}
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 15px rgba(0, 123, 255, 0.4), inset 0 3px 10px rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    transform: translateZ(30px);
+}
+button:hover {
+    transform: translateZ(40px);
+    box-shadow: 0 12px 20px rgba(0, 123, 255, 0.6), inset 0 5px 15px rgba(255, 255, 255, 0.8);
+}
+button:active {
+    transform: translateZ(20px);
+    box-shadow: 0 8px 12px rgba(0, 123, 255, 0.4), inset 0 4px 10px rgba(255, 255, 255, 0.6);
+}
+.result {
+    margin-top: 30px;
+    font-size: 1.8em;
+    color: #007BFF;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 123, 255, 0.3);
+    transform: translateZ(20px);
+}
+
+/* 3D Effects for Form and Elements */
+input, select, button, .result {
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    will-change: transform, box-shadow;
+}
+form:active input, form:active select, form:active button, form:active .result {
+    transform: translateZ(50px);
+}
+input:hover, select:hover {
+    transform: translateZ(25px);
+}
+button:hover, .result:hover {
+    transform: translateZ(45px);
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(0,123,255,0.3), transparent);
+    filter: blur(100px);
+    animation: pulse 5s infinite alternate ease-in-out;
+    z-index: -1;
+}
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}
+
+/* Neon Glow Button */
+button {
+    position: relative;
+    overflow: hidden;
+}
+button::before {
+    content: '';
+    position: absolute;
+    width: 300%;
+    height: 300%;
+    top: -100%;
+    left: -100%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+}
+button:hover::before {
+    top: 100%;
+    left: 100%;
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: 700;
+}
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 160px;
+    background-color: #007BFF;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    form {
+        padding: 30px;
+        max-width: 90%;
+    }
+    h1 {
+        font-size: 2.2em;
+    }
+    button {
+        padding: 12px;
+        font-size: 1em;
+    }
+}
+@media screen and (max-width: 480px) {
+    form {
+        padding: 20px;
+        max-width: 100%;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    input, select, button {
+        font-size: 0.9em;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <h1>Distance Converter</h1>
+    <form id="convertForm">
+        <label for="value">Enter Value:</label><br><br>
+        <input type="number" id="value" name="value" step="any" required>
+
+        <label for="from_unit">From Unit:</label>
+        <select id="from_unit" name="from_unit" required>
+            <option value="cm">Centimeters</option>
+            <option value="mm">Millimeters</option>
+            <option value="inches">Inches</option>
+            <option value="km">Kilometers</option>
+            <option value="ft">Feet</option>
+            <option value="m">Meters</option>
+            <option value="yd">Yards</option>
+            <option value="mile">Miles</option>
+            <option value="dm">Decimeters</option>
+        </select>
+<br>
+        <label for="to_unit">To Unit:</label>
+        <select id="to_unit" name="to_unit" required>
+            <option value="cm">Centimeters</option>
+            <option value="mm">Millimeters</option>
+            <option value="inches">Inches</option>
+            <option value="km">Kilometers</option>
+            <option value="ft">Feet</option>
+            <option value="m">Meters</option>
+            <option value="yd">Yards</option>
+            <option value="mile">Miles</option>
+            <option value="dm">Decimeters</option>
+        </select>
+
+        <label for="protocol">Choose Protocol:</label>
+        <select id="protocol" name="protocol" required>
+            <option value="TCP">TCP</option>
+            <option value="UDP">UDP</option>
+        </select>
+
+        <button type="submit">Convert</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const form = document.getElementById('convertForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            const value = formData.get('value');
+            const from_unit = formData.get('from_unit');
+            const to_unit = formData.get('to_unit');
+            const protocol = formData.get('protocol');
+
+            fetch('/convert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    value: value,
+                    from_unit: from_unit,
+                    to_unit: to_unit,
+                    protocol: protocol
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.textContent = 'Error: ' + data.error;
+                } else {
+                    resultDiv.textContent = `Converted Value: ${data.converted_value} (${data.protocol})`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
